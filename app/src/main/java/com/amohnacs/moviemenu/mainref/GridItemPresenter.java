@@ -1,4 +1,4 @@
-package com.amohnacs.moviemenu.main;
+package com.amohnacs.moviemenu.mainref;
 
 import android.content.Context;
 import android.graphics.Color;

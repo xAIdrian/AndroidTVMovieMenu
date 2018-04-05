@@ -52,7 +52,7 @@ public class PlaybackVideoFragment extends VideoSupportFragment {
             }
         });
         mMediaPlayerGlue.setTitle(movie.getTitle());
-        mMediaPlayerGlue.setArtist(movie.getDescription());
+        //mMediaPlayerGlue.setArtist(movie.getTagLine());
         mMediaPlayerGlue.setVideoUrl(movie.getVideoUrl());
     }
 

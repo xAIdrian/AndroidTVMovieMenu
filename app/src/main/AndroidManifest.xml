@@ -22,7 +22,7 @@
         android:banner="@drawable/bitcoin_banner"
         android:logo="@drawable/bitcoin_banner">
         <activity
-            android:name=".main.ui.MainActivity"
+            android:name=".mainref.ui.MainActivity"
             android:icon="@drawable/bitcoin_banner"
             android:label="@string/app_name"
             android:screenOrientation="landscape"
@@ -35,7 +35,7 @@
         </activity>
         <activity android:name=".details.ui.DetailsActivity" />
         <activity android:name=".playback.PlaybackActivity" />
-        <activity android:name=".details.error.BrowseErrorActivity" />
+        <activity android:name=".error.BrowseErrorActivity" />
     </application>
 
 </manifest>

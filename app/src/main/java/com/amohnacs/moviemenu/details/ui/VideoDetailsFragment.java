@@ -42,8 +42,8 @@ import android.widget.Toast;
 import com.amohnacs.moviemenu.R;
 import com.amohnacs.moviemenu.playback.PlaybackActivity;
 import com.amohnacs.moviemenu.details.DetailsDescriptionPresenter;
-import com.amohnacs.moviemenu.main.CardPresenter;
-import com.amohnacs.moviemenu.main.ui.MainActivity;
+import com.amohnacs.moviemenu.mainref.CardPresenter;
+import com.amohnacs.moviemenu.mainref.ui.MainActivity;
 import com.amohnacs.moviemenu.model.Movie;
 import com.amohnacs.moviemenu.model.MovieList;
 import com.amohnacs.moviemenu.ViewUtils;
@@ -142,7 +142,7 @@ public class VideoDetailsFragment extends DetailsFragment {
                 ContextCompat.getDrawable(getContext(), R.drawable.default_background));
 
         Glide.with(getActivity())
-                .load(mSelectedMovie.getCardImageUrl())
+                .load(mSelectedMovie.getPosterPath())
                 .centerCrop()
                 .error(R.drawable.default_background)
                 .into(new SimpleTarget<GlideDrawable>(width, height) {

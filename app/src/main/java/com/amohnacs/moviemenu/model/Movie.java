@@ -14,23 +14,41 @@
 
 package com.amohnacs.moviemenu.model;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.io.Serializable;
 
 /*
- * Movie class represents video entity with title, description, image thumbs and video url.
+ * Movie class represents video entity with title, tagLine, image thumbs and video url.
  */
 public class Movie implements Serializable {
-    static final long serialVersionUID = 727566175075960653L;
+
+    @SerializedName("id")
     private long id;
+    @SerializedName("title")
     private String title;
-    private String description;
-    private String bgImageUrl;
-    private String cardImageUrl;
+    @SerializedName("backdrop_path")
+    private String backdropPath;
+    @SerializedName("poster_path")
+    private String posterPath;
+
     private String videoUrl;
-    private String studio;
-    private String category;
+    @SerializedName("overview")
+    private String overview;
+    @SerializedName("popularity")
+    private double populatiry;
 
     public Movie() {
+    }
+
+    public Movie(long id, String title, String backdropPath, String posterPath, String videoUrl, String overview, double populatiry) {
+        this.id = id;
+        this.title = title;
+        this.backdropPath = backdropPath;
+        this.posterPath = posterPath;
+        this.videoUrl = videoUrl;
+        this.overview = overview;
+        this.populatiry = populatiry;
     }
 
     public long getId() {
@@ -49,20 +67,12 @@ public class Movie implements Serializable {
         this.title = title;
     }
 
-    public String getDescription() {
-        return description;
+    public String getOverview() {
+        return overview;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public String getStudio() {
-        return studio;
-    }
-
-    public void setStudio(String studio) {
-        this.studio = studio;
+    public void setOverview(String overview) {
+        this.overview = overview;
     }
 
     public String getVideoUrl() {
@@ -74,38 +84,20 @@ public class Movie implements Serializable {
     }
 
     public String getBackgroundImageUrl() {
-        return bgImageUrl;
+        return backdropPath;
     }
 
     public void setBackgroundImageUrl(String bgImageUrl) {
-        this.bgImageUrl = bgImageUrl;
+        this.backdropPath = bgImageUrl;
     }
 
-    public String getCardImageUrl() {
-        return cardImageUrl;
+    public String getPosterPath() {
+        return posterPath;
     }
 
-    public void setCardImageUrl(String cardImageUrl) {
-        this.cardImageUrl = cardImageUrl;
-    }
-
-    public String getCategory() {
-        return category;
-    }
-
-    public void setCategory(String category) {
-        this.category = category;
+    public void setPosterPath(String posterPath) {
+        this.posterPath = posterPath;
     }
 
 
-    @Override
-    public String toString() {
-        return "Movie{" +
-                "id=" + id +
-                ", title='" + title + '\'' +
-                ", videoUrl='" + videoUrl + '\'' +
-                ", backgroundImageUrl='" + bgImageUrl + '\'' +
-                ", cardImageUrl='" + cardImageUrl + '\'' +
-                '}';
-    }
 }

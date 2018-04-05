@@ -17,6 +17,7 @@ package com.amohnacs.moviemenu.model;
 import java.util.ArrayList;
 import java.util.List;
 
+// TODO: 4/5/18 this has got to go
 public final class MovieList {
     public static final String MOVIE_CATEGORY[] = {
             "Category Zero",
@@ -99,10 +100,10 @@ public final class MovieList {
         Movie movie = new Movie();
         movie.setId(count++);
         movie.setTitle(title);
-        movie.setDescription(description);
-        movie.setStudio(studio);
-        movie.setCategory(category);
-        movie.setCardImageUrl(cardImageUrl);
+       // movie.setTagLine(description);
+        movie.setOverview(studio);
+        //movie.setCategory(category);
+        movie.setPosterPath(cardImageUrl);
         movie.setBackgroundImageUrl(backgroundImageUrl);
         movie.setVideoUrl(videoUrl);
         return movie;

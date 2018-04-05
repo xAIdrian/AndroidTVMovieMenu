@@ -12,7 +12,7 @@
  * the License.
  */
 
-package com.amohnacs.moviemenu.main.ui;
+package com.amohnacs.moviemenu.mainref.ui;
 
 import java.util.Collections;
 import java.util.List;
@@ -42,10 +42,10 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.amohnacs.moviemenu.R;
-import com.amohnacs.moviemenu.details.error.BrowseErrorActivity;
+import com.amohnacs.moviemenu.error.BrowseErrorActivity;
 import com.amohnacs.moviemenu.details.ui.DetailsActivity;
-import com.amohnacs.moviemenu.main.CardPresenter;
-import com.amohnacs.moviemenu.main.GridItemPresenter;
+import com.amohnacs.moviemenu.mainref.CardPresenter;
+import com.amohnacs.moviemenu.mainref.GridItemPresenter;
 import com.amohnacs.moviemenu.model.Movie;
 import com.amohnacs.moviemenu.model.MovieList;
 import com.bumptech.glide.Glide;
