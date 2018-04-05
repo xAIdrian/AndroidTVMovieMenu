@@ -12,7 +12,7 @@
  * the License.
  */
 
-package com.amohnacs.bitcointv;
+package com.amohnacs.bitcointv.main;
 
 import android.graphics.drawable.Drawable;
 import android.support.v17.leanback.widget.ImageCardView;
@@ -20,11 +20,15 @@ import android.support.v17.leanback.widget.Presenter;
 import android.util.Log;
 import android.view.ViewGroup;
 
+import com.amohnacs.bitcointv.R;
+import com.amohnacs.bitcointv.model.Movie;
 import com.bumptech.glide.Glide;
 
-/*
+/**
  * A CardPresenter is used to generate Views and bind Objects to them on demand.
- * It contains an Image CardView
+ * It contains an Image CardView.
+ * <p></p>
+ * Does this remind anyone of a RecyclerViewAdapter?
  */
 public class CardPresenter extends Presenter {
     private static final String TAG = "CardPresenter";
@@ -77,6 +81,7 @@ public class CardPresenter extends Presenter {
 
         Log.d(TAG, "onBindViewHolder");
         if (movie.getCardImageUrl() != null) {
+
             cardView.setTitleText(movie.getTitle());
             cardView.setContentText(movie.getStudio());
             cardView.setMainImageDimensions(CARD_WIDTH, CARD_HEIGHT);

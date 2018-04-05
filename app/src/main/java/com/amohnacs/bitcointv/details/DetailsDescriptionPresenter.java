@@ -12,9 +12,11 @@
  * the License.
  */
 
-package com.amohnacs.bitcointv;
+package com.amohnacs.bitcointv.details;
 
 import android.support.v17.leanback.widget.AbstractDetailsDescriptionPresenter;
+
+import com.amohnacs.bitcointv.model.Movie;
 
 public class DetailsDescriptionPresenter extends AbstractDetailsDescriptionPresenter {
 

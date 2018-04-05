@@ -12,25 +12,23 @@
  * the License.
  */
 
-package com.amohnacs.bitcointv;
+package com.amohnacs.bitcointv.playback;
 
-import android.app.Activity;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
 
-/*
- * Details activity class that loads LeanbackDetailsFragment class
+/**
+ * Loads {@link PlaybackVideoFragment}.
  */
-public class DetailsActivity extends Activity {
-    public static final String SHARED_ELEMENT_NAME = "hero";
-    public static final String MOVIE = "Movie";
+public class PlaybackActivity extends FragmentActivity {
 
-    /**
-     * Called when the activity is first created.
-     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_details);
+        if (savedInstanceState == null) {
+            getSupportFragmentManager().beginTransaction()
+                    .replace(android.R.id.content, new PlaybackVideoFragment())
+                    .commit();
+        }
     }
-
 }

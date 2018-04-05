@@ -12,7 +12,7 @@
  * the License.
  */
 
-package com.amohnacs.bitcointv;
+package com.amohnacs.bitcointv.model;
 
 import java.util.ArrayList;
 import java.util.List;

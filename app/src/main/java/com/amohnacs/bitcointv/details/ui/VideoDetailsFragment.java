@@ -12,13 +12,11 @@
  * the License.
  */
 
-package com.amohnacs.bitcointv;
+package com.amohnacs.bitcointv.details.ui;
 
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v17.leanback.app.DetailsFragment;
 import android.support.v17.leanback.app.DetailsFragmentBackgroundController;
 import android.support.v17.leanback.widget.Action;
@@ -41,6 +39,13 @@ import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.amohnacs.bitcointv.playback.PlaybackActivity;
+import com.amohnacs.bitcointv.R;
+import com.amohnacs.bitcointv.details.DetailsDescriptionPresenter;
+import com.amohnacs.bitcointv.main.CardPresenter;
+import com.amohnacs.bitcointv.main.ui.MainActivity;
+import com.amohnacs.bitcointv.model.Movie;
+import com.amohnacs.bitcointv.model.MovieList;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.animation.GlideAnimation;
@@ -49,12 +54,14 @@ import com.bumptech.glide.request.target.SimpleTarget;
 import java.util.Collections;
 import java.util.List;
 
-/*
+import static com.amohnacs.bitcointv.ViewUtils.convertDpToPixel;
+
+/**
  * LeanbackDetailsFragment extends DetailsFragment, a Wrapper fragment for leanback details screens.
  * It shows a detailed view of video and its meta plus related videos.
  */
 public class VideoDetailsFragment extends DetailsFragment {
-    private static final String TAG = "VideoDetailsFragment";
+    private static final String TAG = VideoDetailsFragment.class.getSimpleName();
 
     private static final int ACTION_WATCH_TRAILER = 1;
     private static final int ACTION_RENT = 2;
@@ -63,6 +70,7 @@ public class VideoDetailsFragment extends DetailsFragment {
     private static final int DETAIL_THUMB_WIDTH = 274;
     private static final int DETAIL_THUMB_HEIGHT = 274;
 
+    //for use with related movies
     private static final int NUM_COLS = 10;
 
     private Movie mSelectedMovie;
@@ -81,15 +89,20 @@ public class VideoDetailsFragment extends DetailsFragment {
 
         mSelectedMovie =
                 (Movie) getActivity().getIntent().getSerializableExtra(DetailsActivity.MOVIE);
+
         if (mSelectedMovie != null) {
+
             mPresenterSelector = new ClassPresenterSelector();
             mAdapter = new ArrayObjectAdapter(mPresenterSelector);
+
             setupDetailsOverviewRow();
             setupDetailsOverviewRowPresenter();
             setupRelatedMovieListRow();
             setAdapter(mAdapter);
             initializeBackground(mSelectedMovie);
+
             setOnItemViewClickedListener(new ItemViewClickedListener());
+
         } else {
             Intent intent = new Intent(getActivity(), MainActivity.class);
             startActivity(intent);
@@ -98,6 +111,7 @@ public class VideoDetailsFragment extends DetailsFragment {
 
     private void initializeBackground(Movie data) {
         mDetailsBackground.enableParallax();
+
         Glide.with(getActivity())
                 .load(data.getBackgroundImageUrl())
                 .asBitmap()
@@ -113,13 +127,21 @@ public class VideoDetailsFragment extends DetailsFragment {
                 });
     }
 
+    /**
+     * Programmatically set up our view's data
+     */
     private void setupDetailsOverviewRow() {
         Log.d(TAG, "doInBackground: " + mSelectedMovie.toString());
+
         final DetailsOverviewRow row = new DetailsOverviewRow(mSelectedMovie);
-        row.setImageDrawable(
-                ContextCompat.getDrawable(getContext(), R.drawable.default_background));
         int width = convertDpToPixel(getActivity().getApplicationContext(), DETAIL_THUMB_WIDTH);
         int height = convertDpToPixel(getActivity().getApplicationContext(), DETAIL_THUMB_HEIGHT);
+
+        ArrayObjectAdapter actionAdapter = new ArrayObjectAdapter();
+
+        row.setImageDrawable(
+                ContextCompat.getDrawable(getContext(), R.drawable.default_background));
+
         Glide.with(getActivity())
                 .load(mSelectedMovie.getCardImageUrl())
                 .centerCrop()
@@ -134,8 +156,6 @@ public class VideoDetailsFragment extends DetailsFragment {
                         mAdapter.notifyArrayItemRangeChanged(0, mAdapter.size());
                     }
                 });
-
-        ArrayObjectAdapter actionAdapter = new ArrayObjectAdapter();
 
         actionAdapter.add(
                 new Action(
@@ -157,16 +177,23 @@ public class VideoDetailsFragment extends DetailsFragment {
         mAdapter.add(row);
     }
 
+    /**
+     * Binding our overview views to our business logic.
+     * <p></p>
+     * First, we are setting up our {@link FullWidthDetailsOverviewRowPresenter} to be aligned beneath
+     * our OverView Adapter. Second, we set the hero transition from our focused and selected movie item
+     *
+     */
     private void setupDetailsOverviewRowPresenter() {
-        // Set detail background.
         FullWidthDetailsOverviewRowPresenter detailsPresenter =
                 new FullWidthDetailsOverviewRowPresenter(new DetailsDescriptionPresenter());
-        detailsPresenter.setBackgroundColor(
-                ContextCompat.getColor(getContext(), R.color.selected_background));
-
-        // Hook up transition element.
         FullWidthDetailsOverviewSharedElementHelper sharedElementHelper =
                 new FullWidthDetailsOverviewSharedElementHelper();
+
+        // Set detail background.
+        detailsPresenter.setBackgroundColor(
+                ContextCompat.getColor(getContext(), R.color.selected_background));
+        // Hook up transition element.
         sharedElementHelper.setSharedElementEnterTransition(
                 getActivity(), DetailsActivity.SHARED_ELEMENT_NAME);
         detailsPresenter.setListener(sharedElementHelper);
@@ -184,6 +211,7 @@ public class VideoDetailsFragment extends DetailsFragment {
                 }
             }
         });
+        //we are not interacting with our movies anymore but with overview actions items
         mPresenterSelector.addClassPresenter(DetailsOverviewRow.class, detailsPresenter);
     }
 
@@ -202,17 +230,13 @@ public class VideoDetailsFragment extends DetailsFragment {
         mPresenterSelector.addClassPresenter(ListRow.class, new ListRowPresenter());
     }
 
-    public int convertDpToPixel(Context context, int dp) {
-        float density = context.getResources().getDisplayMetrics().density;
-        return Math.round((float) dp * density);
-    }
-
     private final class ItemViewClickedListener implements OnItemViewClickedListener {
         @Override
         public void onItemClicked(Presenter.ViewHolder itemViewHolder, Object item,
                                   RowPresenter.ViewHolder rowViewHolder, Row row) {
 
             if (item instanceof Movie) {
+
                 Log.d(TAG, "Item: " + item.toString());
                 Intent intent = new Intent(getActivity(), DetailsActivity.class);
                 intent.putExtra(getResources().getString(R.string.movie), mSelectedMovie);
@@ -221,6 +245,7 @@ public class VideoDetailsFragment extends DetailsFragment {
                         getActivity(),
                         ((ImageCardView) itemViewHolder.view).getMainImageView(),
                         DetailsActivity.SHARED_ELEMENT_NAME).toBundle();
+
                 getActivity().startActivity(intent, bundle);
             }
         }

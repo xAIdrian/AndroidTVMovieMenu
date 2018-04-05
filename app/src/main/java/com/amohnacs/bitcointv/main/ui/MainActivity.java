@@ -12,10 +12,12 @@
  * the License.
  */
 
-package com.amohnacs.bitcointv;
+package com.amohnacs.bitcointv.main.ui;
 
 import android.app.Activity;
 import android.os.Bundle;
+
+import com.amohnacs.bitcointv.R;
 
 /*
  * MainActivity class that loads {@link MainFragment}.

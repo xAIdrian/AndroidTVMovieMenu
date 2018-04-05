@@ -11,11 +11,13 @@
  * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.amohnacs.bitcointv;
+package com.amohnacs.bitcointv.details.error;
 
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+
+import com.amohnacs.bitcointv.R;
 
 /*
  * This class demonstrates how to extend ErrorFragment

@@ -12,7 +12,7 @@
  * the License.
  */
 
-package com.amohnacs.bitcointv;
+package com.amohnacs.bitcointv.main.ui;
 
 import java.util.Collections;
 import java.util.List;
@@ -20,7 +20,6 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
@@ -39,12 +38,16 @@ import android.support.v17.leanback.widget.RowPresenter;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.util.DisplayMetrics;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
 import android.widget.Toast;
 
+import com.amohnacs.bitcointv.details.error.BrowseErrorActivity;
+import com.amohnacs.bitcointv.details.ui.DetailsActivity;
+import com.amohnacs.bitcointv.R;
+import com.amohnacs.bitcointv.main.CardPresenter;
+import com.amohnacs.bitcointv.main.GridItemPresenter;
+import com.amohnacs.bitcointv.model.Movie;
+import com.amohnacs.bitcointv.model.MovieList;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.animation.GlideAnimation;
@@ -54,8 +57,6 @@ public class MainFragment extends BrowseFragment {
     private static final String TAG = "MainFragment";
 
     private static final int BACKGROUND_UPDATE_DELAY = 300;
-    private static final int GRID_ITEM_WIDTH = 200;
-    private static final int GRID_ITEM_HEIGHT = 200;
     private static final int NUM_ROWS = 6;
     private static final int NUM_COLS = 15;
 
@@ -91,6 +92,7 @@ public class MainFragment extends BrowseFragment {
     }
 
     private void loadRows() {
+        // TODO: 4/5/18 this is static data. this has to go
         List<Movie> list = MovieList.setupMovies();
 
         mRowsAdapter = new ArrayObjectAdapter(new ListRowPresenter());
@@ -111,7 +113,7 @@ public class MainFragment extends BrowseFragment {
 
         HeaderItem gridHeader = new HeaderItem(i, "PREFERENCES");
 
-        GridItemPresenter mGridPresenter = new GridItemPresenter();
+        GridItemPresenter mGridPresenter = new GridItemPresenter(getActivity());
         ArrayObjectAdapter gridRowAdapter = new ArrayObjectAdapter(mGridPresenter);
         gridRowAdapter.add(getResources().getString(R.string.grid_view));
         gridRowAdapter.add(getString(R.string.error_fragment));
@@ -121,6 +123,11 @@ public class MainFragment extends BrowseFragment {
         setAdapter(mRowsAdapter);
     }
 
+    /**
+     * {@link BackgroundManager} supports background image continuity between multiple Activities.
+     * We are attaching our current activity to the manager and settings the activity's background
+     * being supplied by the BackgroundManager
+     */
     private void prepareBackgroundManager() {
 
         mBackgroundManager = BackgroundManager.getInstance(getActivity());
@@ -131,6 +138,7 @@ public class MainFragment extends BrowseFragment {
     }
 
     private void setupUIElements() {
+        //this code shows an image in teh fragment's title bar
         // setBadgeDrawable(getActivity().getResources().getDrawable(
         // R.drawable.videos_by_google_banner));
         setTitle(getString(R.string.browse_title)); // Badge, when set, takes precedent
@@ -161,6 +169,7 @@ public class MainFragment extends BrowseFragment {
     protected void updateBackground(String uri) {
         int width = mMetrics.widthPixels;
         int height = mMetrics.heightPixels;
+
         Glide.with(getActivity())
                 .load(uri)
                 .centerCrop()
@@ -184,11 +193,29 @@ public class MainFragment extends BrowseFragment {
         mBackgroundTimer.schedule(new UpdateBackgroundTask(), BACKGROUND_UPDATE_DELAY);
     }
 
+    /**
+     * This onClickListener is when the specific view comes into focus, the user is about to select something
+     */
+    private final class ItemViewSelectedListener implements OnItemViewSelectedListener {
+        @Override
+        public void onItemSelected(Presenter.ViewHolder itemViewHolder, Object item,
+                                   RowPresenter.ViewHolder rowViewHolder, Row row) {
+            if (item instanceof Movie) {
+                mBackgroundUri = ((Movie) item).getBackgroundImageUrl();
+                startBackgroundTimer();
+            }
+        }
+    }
+
+    /**
+     * Once focused, the user clicks again, and this listener is engaged
+     */
     private final class ItemViewClickedListener implements OnItemViewClickedListener {
         @Override
         public void onItemClicked(Presenter.ViewHolder itemViewHolder, Object item,
                                   RowPresenter.ViewHolder rowViewHolder, Row row) {
 
+            //if the adapter item we clicked on holds a movie object
             if (item instanceof Movie) {
                 Movie movie = (Movie) item;
                 Log.d(TAG, "Item: " + item.toString());
@@ -199,26 +226,20 @@ public class MainFragment extends BrowseFragment {
                         getActivity(),
                         ((ImageCardView) itemViewHolder.view).getMainImageView(),
                         DetailsActivity.SHARED_ELEMENT_NAME).toBundle();
+
                 getActivity().startActivity(intent, bundle);
+
             } else if (item instanceof String) {
+
                 if (((String) item).contains(getString(R.string.error_fragment))) {
+
                     Intent intent = new Intent(getActivity(), BrowseErrorActivity.class);
                     startActivity(intent);
+
                 } else {
                     Toast.makeText(getActivity(), ((String) item), Toast.LENGTH_SHORT)
                             .show();
                 }
-            }
-        }
-    }
-
-    private final class ItemViewSelectedListener implements OnItemViewSelectedListener {
-        @Override
-        public void onItemSelected(Presenter.ViewHolder itemViewHolder, Object item,
-                                   RowPresenter.ViewHolder rowViewHolder, Row row) {
-            if (item instanceof Movie) {
-                mBackgroundUri = ((Movie) item).getBackgroundImageUrl();
-                startBackgroundTimer();
             }
         }
     }
@@ -236,27 +257,6 @@ public class MainFragment extends BrowseFragment {
         }
     }
 
-    private class GridItemPresenter extends Presenter {
-        @Override
-        public ViewHolder onCreateViewHolder(ViewGroup parent) {
-            TextView view = new TextView(parent.getContext());
-            view.setLayoutParams(new ViewGroup.LayoutParams(GRID_ITEM_WIDTH, GRID_ITEM_HEIGHT));
-            view.setFocusable(true);
-            view.setFocusableInTouchMode(true);
-            view.setBackgroundColor(getResources().getColor(R.color.default_background));
-            view.setTextColor(Color.WHITE);
-            view.setGravity(Gravity.CENTER);
-            return new ViewHolder(view);
-        }
 
-        @Override
-        public void onBindViewHolder(ViewHolder viewHolder, Object item) {
-            ((TextView) viewHolder.view).setText((String) item);
-        }
-
-        @Override
-        public void onUnbindViewHolder(ViewHolder viewHolder) {
-        }
-    }
 
 }

@@ -12,13 +12,16 @@
  * the License.
  */
 
-package com.amohnacs.bitcointv;
+package com.amohnacs.bitcointv.playback;
 
 import android.os.Bundle;
 import android.support.v17.leanback.app.VideoSupportFragment;
 import android.support.v17.leanback.app.VideoSupportFragmentGlueHost;
 import android.support.v17.leanback.media.MediaPlayerGlue;
 import android.support.v17.leanback.media.PlaybackGlue;
+
+import com.amohnacs.bitcointv.details.ui.DetailsActivity;
+import com.amohnacs.bitcointv.model.Movie;
 
 /**
  * Handles video playback with media controls.
