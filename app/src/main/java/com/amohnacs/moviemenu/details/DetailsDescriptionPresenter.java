@@ -12,23 +12,22 @@
  * the License.
  */
 
-package com.amohnacs.bitcointv;
+package com.amohnacs.moviemenu.details;
 
-import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
+import android.support.v17.leanback.widget.AbstractDetailsDescriptionPresenter;
 
-/**
- * Loads {@link PlaybackVideoFragment}.
- */
-public class PlaybackActivity extends FragmentActivity {
+import com.amohnacs.moviemenu.model.Movie;
+
+public class DetailsDescriptionPresenter extends AbstractDetailsDescriptionPresenter {
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (savedInstanceState == null) {
-            getSupportFragmentManager().beginTransaction()
-                    .replace(android.R.id.content, new PlaybackVideoFragment())
-                    .commit();
+    protected void onBindDescription(ViewHolder viewHolder, Object item) {
+        Movie movie = (Movie) item;
+
+        if (movie != null) {
+            viewHolder.getTitle().setText(movie.getTitle());
+            viewHolder.getSubtitle().setText(movie.getOverview());
+            //viewHolder.getBody().setText(movie.getTagLine());
         }
     }
 }

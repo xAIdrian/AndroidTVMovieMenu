@@ -12,7 +12,7 @@
  * the License.
  */
 
-package com.amohnacs.bitcointv;
+package com.amohnacs.moviemenu.mainref;
 
 import android.graphics.drawable.Drawable;
 import android.support.v17.leanback.widget.ImageCardView;
@@ -20,11 +20,15 @@ import android.support.v17.leanback.widget.Presenter;
 import android.util.Log;
 import android.view.ViewGroup;
 
+import com.amohnacs.moviemenu.R;
+import com.amohnacs.moviemenu.model.Movie;
 import com.bumptech.glide.Glide;
 
-/*
+/**
  * A CardPresenter is used to generate Views and bind Objects to them on demand.
- * It contains an Image CardView
+ * It contains an Image CardView.
+ * <p></p>
+ * Does this remind anyone of a RecyclerViewAdapter?
  */
 public class CardPresenter extends Presenter {
     private static final String TAG = "CardPresenter";
@@ -76,12 +80,13 @@ public class CardPresenter extends Presenter {
         ImageCardView cardView = (ImageCardView) viewHolder.view;
 
         Log.d(TAG, "onBindViewHolder");
-        if (movie.getCardImageUrl() != null) {
+        if (movie.getPosterPath() != null) {
+
             cardView.setTitleText(movie.getTitle());
-            cardView.setContentText(movie.getStudio());
+            cardView.setContentText(movie.getOverview());
             cardView.setMainImageDimensions(CARD_WIDTH, CARD_HEIGHT);
             Glide.with(viewHolder.view.getContext())
-                    .load(movie.getCardImageUrl())
+                    .load(movie.getPosterPath())
                     .centerCrop()
                     .error(mDefaultCardImage)
                     .into(cardView.getMainImageView());

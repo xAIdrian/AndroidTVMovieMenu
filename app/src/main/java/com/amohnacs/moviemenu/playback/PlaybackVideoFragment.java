@@ -12,13 +12,16 @@
  * the License.
  */
 
-package com.amohnacs.bitcointv;
+package com.amohnacs.moviemenu.playback;
 
 import android.os.Bundle;
 import android.support.v17.leanback.app.VideoSupportFragment;
 import android.support.v17.leanback.app.VideoSupportFragmentGlueHost;
 import android.support.v17.leanback.media.MediaPlayerGlue;
 import android.support.v17.leanback.media.PlaybackGlue;
+
+import com.amohnacs.moviemenu.details.ui.DetailsActivity;
+import com.amohnacs.moviemenu.model.Movie;
 
 /**
  * Handles video playback with media controls.
@@ -49,7 +52,7 @@ public class PlaybackVideoFragment extends VideoSupportFragment {
             }
         });
         mMediaPlayerGlue.setTitle(movie.getTitle());
-        mMediaPlayerGlue.setArtist(movie.getDescription());
+        //mMediaPlayerGlue.setArtist(movie.getTagLine());
         mMediaPlayerGlue.setVideoUrl(movie.getVideoUrl());
     }
 
@@ -59,5 +62,15 @@ public class PlaybackVideoFragment extends VideoSupportFragment {
         if (mMediaPlayerGlue != null) {
             mMediaPlayerGlue.pause();
         }
+    }
+
+    /**
+     * Avoid playback during low-power mode
+     */
+    @Override
+    public void onStop() {
+        // App-specific method to stop playback
+        mMediaPlayerGlue.pause();
+        super.onStop();
     }
 }
