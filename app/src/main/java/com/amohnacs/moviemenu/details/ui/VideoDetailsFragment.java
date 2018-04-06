@@ -43,7 +43,7 @@ import com.amohnacs.moviemenu.R;
 import com.amohnacs.moviemenu.playback.PlaybackActivity;
 import com.amohnacs.moviemenu.details.DetailsDescriptionPresenter;
 import com.amohnacs.moviemenu.mainref.CardPresenter;
-import com.amohnacs.moviemenu.mainref.ui.MainActivity;
+import com.amohnacs.moviemenu.main.ui.MainActivity;
 import com.amohnacs.moviemenu.model.Movie;
 import com.amohnacs.moviemenu.model.MovieList;
 import com.amohnacs.moviemenu.utils.ViewUtils;
@@ -112,7 +112,7 @@ public class VideoDetailsFragment extends DetailsFragment {
         mDetailsBackground.enableParallax();
 
         Glide.with(getActivity())
-                .load(data.getBackgroundImageUrl())
+                .load(data.getBackdropPath())
                 .asBitmap()
                 .centerCrop()
                 .error(R.drawable.default_background)
