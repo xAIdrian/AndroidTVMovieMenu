@@ -2,8 +2,6 @@ package com.amohnacs.moviemenu.main;
 
 import android.content.Context;
 import android.databinding.DataBindingUtil;
-import android.graphics.drawable.Drawable;
-import android.support.v17.leanback.widget.ImageCardView;
 import android.support.v17.leanback.widget.Presenter;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -11,7 +9,7 @@ import android.view.ViewGroup;
 
 import com.amohnacs.moviemenu.R;
 import com.amohnacs.moviemenu.databinding.ViewMovieCardBinding;
-import com.amohnacs.moviemenu.main.ui.MovieCardView;
+import com.amohnacs.moviemenu.main.ui.MovieCardViewHolder;
 import com.amohnacs.moviemenu.model.Movie;
 
 import java.util.Collections;
@@ -34,22 +32,26 @@ public class MoviePresenter extends Presenter {
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent) {
-        ViewMovieCardBinding binding = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()), R.layout.view_movie_card ,parent, false);
-        return new ViewHolder(new MovieCardView(context, binding));
+        LayoutInflater layoutInflater =
+                LayoutInflater.from(parent.getContext());
+        ViewMovieCardBinding binding = DataBindingUtil.inflate(
+                layoutInflater, R.layout.view_movie_card, parent,false);
+        return new ViewHolder(new MovieCardViewHolder(context, binding));
     }
 
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, Object item) {
-        //((MovieCardView) viewHolder.view).bind((Movie) item);
         if (item instanceof Movie) {
-            ((MovieCardView) viewHolder.view).bind((Movie) item);
+            MovieCardViewHolder movieCardViewHolder = ((MovieCardViewHolder) viewHolder.view);
+            movieCardViewHolder.bind((Movie) item);
         }
     }
 
     @Override
     public void onUnbindViewHolder(ViewHolder viewHolder) {
         Log.d(TAG, "onUnbindViewHolder");
-        MovieCardView cardView = ((MovieCardView) viewHolder.view);
         //todo :: Remove references to images so that the garbage collector can free up memory
     }
+
+
 }

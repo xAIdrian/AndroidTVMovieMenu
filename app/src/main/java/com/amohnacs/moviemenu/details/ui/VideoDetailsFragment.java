@@ -45,7 +45,6 @@ import com.amohnacs.moviemenu.details.DetailsDescriptionPresenter;
 import com.amohnacs.moviemenu.mainref.CardPresenter;
 import com.amohnacs.moviemenu.main.ui.MainActivity;
 import com.amohnacs.moviemenu.model.Movie;
-import com.amohnacs.moviemenu.model.MovieList;
 import com.amohnacs.moviemenu.utils.ViewUtils;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
@@ -96,7 +95,7 @@ public class VideoDetailsFragment extends DetailsFragment {
 
             setupDetailsOverviewRow();
             setupDetailsOverviewRowPresenter();
-            setupRelatedMovieListRow();
+            //setupRelatedMovieListRow();
             setAdapter(mAdapter);
             initializeBackground(mSelectedMovie);
 
@@ -214,6 +213,7 @@ public class VideoDetailsFragment extends DetailsFragment {
         mPresenterSelector.addClassPresenter(DetailsOverviewRow.class, detailsPresenter);
     }
 
+    /*
     private void setupRelatedMovieListRow() {
         String subcategories[] = {getString(R.string.related_movies)};
         List<Movie> list = MovieList.getList();
@@ -228,6 +228,7 @@ public class VideoDetailsFragment extends DetailsFragment {
         mAdapter.add(new ListRow(header, listRowAdapter));
         mPresenterSelector.addClassPresenter(ListRow.class, new ListRowPresenter());
     }
+    */
 
     private final class ItemViewClickedListener implements OnItemViewClickedListener {
         @Override

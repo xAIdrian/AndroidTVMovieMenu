@@ -1,12 +1,17 @@
 package com.amohnacs.moviemenu.main.ui;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Timer;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v17.leanback.app.BrowseFragment;
 import android.support.v17.leanback.widget.ArrayObjectAdapter;
+import android.support.v17.leanback.widget.HeaderItem;
 import android.support.v17.leanback.widget.ImageCardView;
+import android.support.v17.leanback.widget.ListRow;
+import android.support.v17.leanback.widget.ListRowPresenter;
 import android.support.v17.leanback.widget.OnItemViewClickedListener;
 import android.support.v17.leanback.widget.OnItemViewSelectedListener;
 import android.support.v17.leanback.widget.Presenter;
@@ -14,40 +19,43 @@ import android.support.v17.leanback.widget.Row;
 import android.support.v17.leanback.widget.RowPresenter;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.util.Log;
-import android.view.View;
 import android.widget.Toast;
 
+import com.amohnacs.moviemenu.MovieMenu;
 import com.amohnacs.moviemenu.R;
 import com.amohnacs.moviemenu.base.TimedBackgroundManager;
 import com.amohnacs.moviemenu.error.BrowseErrorActivity;
 import com.amohnacs.moviemenu.details.ui.DetailsActivity;
+import com.amohnacs.moviemenu.main.MoviePresenter;
 import com.amohnacs.moviemenu.main.MovieViewModel;
 import com.amohnacs.moviemenu.model.Movie;
+import com.amohnacs.moviemenu.model.MovieMenuRow;
+import com.amohnacs.moviemenu.utils.CollectionUtils;
 
 public class MainFragment extends BrowseFragment {
-    private static final String TAG = "MainFragment";
+    private static final String TAG = MainFragment.class.getSimpleName();
 
-    private ArrayObjectAdapter mRowsAdapter;
-    private TimedBackgroundManager backgroundManager;
+    private ArrayObjectAdapter rowsAdapter;
+    private TimedBackgroundManager backgroundImageManager;
+    private MovieViewModel viewModel;
+    private List<MovieMenuRow> rows;
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         Log.i(TAG, "onCreate");
         super.onActivityCreated(savedInstanceState);
 
-        backgroundManager = new TimedBackgroundManager(getActivity());
+        viewModel = MovieViewModel.getInstance(getActivity());
+        backgroundImageManager = new TimedBackgroundManager(getActivity());
 
         setupUIElements();
-
-        MovieViewModel.getInstance(getActivity()).getMovies();
-
-        setupEventListeners();
+        // TODO: 4/6/18 indeterminate loader
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        Timer mBackgroundTimer = backgroundManager.getBackgroundTimer();
+        Timer mBackgroundTimer = backgroundImageManager.getBackgroundTimer();
         if (null != mBackgroundTimer) {
             Log.d(TAG, "onDestroy: " + mBackgroundTimer.toString());
             mBackgroundTimer.cancel();
@@ -68,24 +76,31 @@ public class MainFragment extends BrowseFragment {
         setSearchAffordanceColor(getResources().getColor(R.color.search_opaque));
 
         createDataRows();
+        viewModel.getMovies();
     }
 
+    /**
+     * Adds a new {@link MovieMenuRow} to the adapter. Each row will contain a collection of Movies
+     * that will be rendered using the MoviePresenter
+     */
     private void createDataRows() {
+//can this be local ???
+        rowsAdapter = new ArrayObjectAdapter(new ListRowPresenter());
 
-    }
+        rows = viewModel.getRows();
 
-    private void setupEventListeners() {
-        setOnSearchClickedListener(new View.OnClickListener() {
+        if (!CollectionUtils.isEmpty(rows)) {
+            for (int i = 0; i < rows.size(); i++) {
+                MovieMenuRow row = rows.get(i);
 
-            @Override
-            public void onClick(View view) {
-                Toast.makeText(getActivity(), "App search is till under construction", Toast.LENGTH_LONG)
-                        .show();
+                HeaderItem headerItem = new HeaderItem(row.getId(), row.getTitle());
+                ListRow listRow = new ListRow(headerItem, row.getAdapter());
+
+                rowsAdapter.add(listRow);
             }
-        });
+        }
 
-        setOnItemViewClickedListener(new ItemViewClickedListener());
-        setOnItemViewSelectedListener(new ItemViewSelectedListener());
+        setAdapter(rowsAdapter);
     }
 
     /**
@@ -96,8 +111,8 @@ public class MainFragment extends BrowseFragment {
         public void onItemSelected(Presenter.ViewHolder itemViewHolder, Object item,
                                    RowPresenter.ViewHolder rowViewHolder, Row row) {
             if (item instanceof Movie) {
-                backgroundManager.setBackgroundUri(((Movie) item).getBackdropPath());
-                backgroundManager.startBackgroundTimer();
+                backgroundImageManager.setBackgroundUri(((Movie) item).getBackdropPath());
+                backgroundImageManager.startBackgroundTimer();
             }
         }
     }

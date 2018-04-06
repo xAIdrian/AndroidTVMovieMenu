@@ -7,16 +7,19 @@ import java.util.Observable;
 
 import android.databinding.ObservableInt;
 import android.support.annotation.Nullable;
+import android.support.v17.leanback.widget.ArrayObjectAdapter;
 import android.util.Log;
 import android.view.View;
 
 import com.amohnacs.moviemenu.BuildConfig;
-import com.amohnacs.moviemenu.utils.ListUtils;
+import com.amohnacs.moviemenu.R;
+import com.amohnacs.moviemenu.model.MovieMenuRow;
 import com.amohnacs.moviemenu.MovieMenu;
 import com.amohnacs.moviemenu.domain.MovieDatabaseClient;
 import com.amohnacs.moviemenu.domain.RetrofitClientGenerator;
 import com.amohnacs.moviemenu.model.Movie;
 import com.amohnacs.moviemenu.model.MovieResponse;
+import com.amohnacs.moviemenu.utils.CollectionUtils;
 
 import java.util.List;
 
@@ -30,6 +33,7 @@ import io.reactivex.disposables.Disposable;
 
 public class MovieViewModel extends Observable implements MVVM.ViewActions {
     private static final String TAG = MovieViewModel.class.getSimpleName();
+    public static final int EIGHTEEN_MOVIES = 0;
 
     private static volatile MovieViewModel instance;
 
@@ -39,6 +43,7 @@ public class MovieViewModel extends Observable implements MVVM.ViewActions {
 
     public ObservableInt progressBar;
     public ObservableInt movieRecyclerView;
+    private List<MovieMenuRow> rows;
 
     private MovieViewModel(Context context) {
         this.context = context;
@@ -47,6 +52,8 @@ public class MovieViewModel extends Observable implements MVVM.ViewActions {
         movieList = new ArrayList<>();
         progressBar = new ObservableInt(View.GONE);
         movieRecyclerView = new ObservableInt(View.GONE);
+
+        rows = staticallyGenerateDataRows();
     }
 
     public static MovieViewModel getInstance(Context context) {
@@ -81,7 +88,8 @@ public class MovieViewModel extends Observable implements MVVM.ViewActions {
                             progressBar.set(View.GONE);
                             movieRecyclerView.set(View.VISIBLE);
 
-                            updateMovieList(movieResponse.getResults());
+                            bindMovieResponse(movieResponse, EIGHTEEN_MOVIES);
+                            //updateMovieList(movieResponse.getResults());
                         }
 
                         @Override
@@ -103,20 +111,52 @@ public class MovieViewModel extends Observable implements MVVM.ViewActions {
 
     @Override
     public void onMoviePosterClicked(long id) {
+
     }
 
+    private List<MovieMenuRow> staticallyGenerateDataRows() {
+        rows = new ArrayList<>();
+
+        MoviePresenter moviePresenter = new MoviePresenter(context);
+
+        rows.add(new MovieMenuRow(
+                context.getString(R.string.top_title),
+                EIGHTEEN_MOVIES,
+                new ArrayObjectAdapter(moviePresenter)));
+
+        return rows;
+    }
+
+    /*
     private void updateMovieList(List<Movie> movies) {
         movieList.addAll(movies);
         setChanged();
         notifyObservers();
     }
+    */
 
-    @Nullable
-    public List<Movie> getMovieList() {
-        if (!ListUtils.isEmpty(movieList)) {
-            return movieList;
+    /**
+     * Binds a movie response to it's adapter
+     * @param response
+     *      The response from TMDB API
+     * @param id
+     *      The ID / position of the row
+     */
+    private void bindMovieResponse(MovieResponse response, int id) {
+        MovieMenuRow row = rows.get(id);
+        //row.setPage(row.getPage() + 1);
+        for(Movie movie : response.getResults()) {
+            if (movie.getPosterPath() != null) { // Avoid showing movie without posters
+                row.getAdapter().add(movie);
+            }
         }
-        return null;
+    }
+
+    public List<MovieMenuRow> getRows() {
+        if (CollectionUtils.isEmpty(rows)) {
+            rows = staticallyGenerateDataRows();
+        }
+        return rows;
     }
 
     // TODO: 4/6/18 how do we release our RxJava instance and MovieDatabaseClient?
