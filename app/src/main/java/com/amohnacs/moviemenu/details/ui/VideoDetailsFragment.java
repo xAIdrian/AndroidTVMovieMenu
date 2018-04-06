@@ -46,7 +46,7 @@ import com.amohnacs.moviemenu.mainref.CardPresenter;
 import com.amohnacs.moviemenu.mainref.ui.MainActivity;
 import com.amohnacs.moviemenu.model.Movie;
 import com.amohnacs.moviemenu.model.MovieList;
-import com.amohnacs.moviemenu.ViewUtils;
+import com.amohnacs.moviemenu.utils.ViewUtils;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.animation.GlideAnimation;

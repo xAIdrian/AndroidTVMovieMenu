@@ -12,6 +12,8 @@ import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
+
 /**
  * If we would like to expand on our application and include a number of other APIs or endpoints then
  * we need a long term way to do that.  By passing in the class of the Client we reduce boilerplate code
@@ -24,6 +26,7 @@ public class RetrofitClientGenerator {
 
     static Retrofit.Builder retrofitBuilder = new Retrofit.Builder()
             .baseUrl(TMDB_ENDPOINT)
+            .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
             .addConverterFactory(
                     buildGsonConverter()
             );

@@ -31,7 +31,6 @@ public class Movie implements Serializable {
     private String backdropPath;
     @SerializedName("poster_path")
     private String posterPath;
-
     private String videoUrl;
     @SerializedName("overview")
     private String overview;

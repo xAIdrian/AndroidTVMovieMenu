@@ -1,4 +1,4 @@
-package com.amohnacs.moviemenu;
+package com.amohnacs.moviemenu.utils;
 
 import android.content.Context;
 

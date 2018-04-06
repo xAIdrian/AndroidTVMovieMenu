@@ -20,7 +20,8 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Leanback"
         android:banner="@drawable/bitcoin_banner"
-        android:logo="@drawable/bitcoin_banner">
+        android:logo="@drawable/bitcoin_banner"
+        android:name=".MovieMenu">
         <activity
             android:name=".mainref.ui.MainActivity"
             android:icon="@drawable/bitcoin_banner"

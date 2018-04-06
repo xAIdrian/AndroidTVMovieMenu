@@ -44,6 +44,7 @@ import android.widget.Toast;
 import com.amohnacs.moviemenu.R;
 import com.amohnacs.moviemenu.error.BrowseErrorActivity;
 import com.amohnacs.moviemenu.details.ui.DetailsActivity;
+import com.amohnacs.moviemenu.main.MovieViewModel;
 import com.amohnacs.moviemenu.mainref.CardPresenter;
 import com.amohnacs.moviemenu.mainref.GridItemPresenter;
 import com.amohnacs.moviemenu.model.Movie;
@@ -78,6 +79,8 @@ public class MainFragment extends BrowseFragment {
         setupUIElements();
 
         loadRows();
+
+        MovieViewModel.getInstance(getActivity()).getMovies();
 
         setupEventListeners();
     }
