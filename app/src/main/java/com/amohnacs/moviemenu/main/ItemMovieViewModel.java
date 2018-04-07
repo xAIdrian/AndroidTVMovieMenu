@@ -14,6 +14,8 @@ import com.bumptech.glide.Glide;
  */
 
 public class ItemMovieViewModel extends BaseObservable {
+    //sample url for image http://image.tmdb.org/t/p/w1280/3kcEGnYBHDeqmdYf8ZRbKdfmlUy.jpg
+    private static final String GLIDE_IMAGE_ROOT = "http://image.tmdb.org/t/p/w1280";
 
     private Movie movie;
     private Context context;
@@ -25,7 +27,7 @@ public class ItemMovieViewModel extends BaseObservable {
 
     @BindingAdapter("imageUrl")
     public static void setImageUrl(ImageView imageView, String url){
-        Glide.with(imageView.getContext()).load(url).into(imageView);
+        Glide.with(imageView.getContext()).load(GLIDE_IMAGE_ROOT + url).into(imageView);
     }
 
     public String getTitle() {

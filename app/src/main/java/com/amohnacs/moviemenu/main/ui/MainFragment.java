@@ -1,6 +1,5 @@
 package com.amohnacs.moviemenu.main.ui;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
 
@@ -21,12 +20,10 @@ import android.support.v4.app.ActivityOptionsCompat;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.amohnacs.moviemenu.MovieMenu;
 import com.amohnacs.moviemenu.R;
 import com.amohnacs.moviemenu.base.TimedBackgroundManager;
 import com.amohnacs.moviemenu.error.BrowseErrorActivity;
-import com.amohnacs.moviemenu.details.ui.DetailsActivity;
-import com.amohnacs.moviemenu.main.MoviePresenter;
+import com.amohnacs.moviemenu.detailsref.ui.DetailsActivity;
 import com.amohnacs.moviemenu.main.MovieViewModel;
 import com.amohnacs.moviemenu.model.Movie;
 import com.amohnacs.moviemenu.model.MovieMenuRow;
@@ -84,7 +81,6 @@ public class MainFragment extends BrowseFragment {
      * that will be rendered using the MoviePresenter
      */
     private void createDataRows() {
-//can this be local ???
         rowsAdapter = new ArrayObjectAdapter(new ListRowPresenter());
 
         rows = viewModel.getRows();

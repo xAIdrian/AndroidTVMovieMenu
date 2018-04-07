@@ -148,6 +148,9 @@ public class MovieViewModel extends Observable implements MVVM.ViewActions {
         for(Movie movie : response.getResults()) {
             if (movie.getPosterPath() != null) { // Avoid showing movie without posters
                 row.getAdapter().add(movie);
+                //notifying our Observer pattern that things have changed
+                setChanged();
+                notifyObservers();
             }
         }
     }
