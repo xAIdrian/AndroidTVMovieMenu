@@ -35,19 +35,24 @@ public class Movie implements Serializable {
     @SerializedName("overview")
     private String overview;
     @SerializedName("popularity")
-    private double populatiry;
+    private double popularity;
 
     public Movie() {
     }
 
-    public Movie(long id, String title, String backdropPath, String posterPath, String videoUrl, String overview, double populatiry) {
+    public Movie(String posterPath, double popularity) {
+        this.posterPath = posterPath;
+        this.popularity = popularity;
+    }
+
+    public Movie(long id, String title, String backdropPath, String posterPath, String videoUrl, String overview, double popularity) {
         this.id = id;
         this.title = title;
         this.backdropPath = backdropPath;
         this.posterPath = posterPath;
         this.videoUrl = videoUrl;
         this.overview = overview;
-        this.populatiry = populatiry;
+        this.popularity = popularity;
     }
 
     public long getId() {
@@ -82,14 +87,6 @@ public class Movie implements Serializable {
         this.videoUrl = videoUrl;
     }
 
-    public String getBackgroundImageUrl() {
-        return backdropPath;
-    }
-
-    public void setBackgroundImageUrl(String bgImageUrl) {
-        this.backdropPath = bgImageUrl;
-    }
-
     public String getPosterPath() {
         return posterPath;
     }
@@ -98,5 +95,19 @@ public class Movie implements Serializable {
         this.posterPath = posterPath;
     }
 
+    public String getBackdropPath() {
+        return backdropPath;
+    }
 
+    public void setBackdropPath(String backdropPath) {
+        this.backdropPath = backdropPath;
+    }
+
+    public double getPopularity() {
+        return popularity;
+    }
+
+    public void setPopularity(double popularity) {
+        this.popularity = popularity;
+    }
 }

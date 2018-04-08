@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="android.view.View" />
+
+        <variable
+            name="movieViewModel"
+            type="com.amohnacs.moviemenu.main.ItemMovieViewModel" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="@dimen/movie_cardview_width"
+        android:layout_height="@dimen/movie_cardview_height"
+        android:orientation="vertical">
+        <!--
+                app:imageUrl="@{movieViewModel.posterUrl}"
+                android:onClick="@{movieViewModel::onItemClick}" -->
+        <ImageView
+            android:id="@+id/poster_iv"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:scaleType="centerCrop" />
+
+        <TextView
+            android:id="@+id/popularity_tv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/default_margin"
+            android:layout_marginStart="@dimen/default_margin"
+            android:drawableEnd="@drawable/ic_trophy"
+            android:drawablePadding="@dimen/default_margin"
+            android:gravity="end|center_vertical"
+            android:padding="@dimen/default_margin"
+            android:text="@{movieViewModel.popularity}"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/title_text_size"
+            tools:text="123" />
+
+    </LinearLayout>
+
+</layout>

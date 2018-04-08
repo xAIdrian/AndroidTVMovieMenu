@@ -6,7 +6,7 @@ import java.util.Collection;
  * Created by adrianmohnacs on 4/6/18.
  */
 
-public class ListUtils {
+public class CollectionUtils {
 
     public static <T extends Collection> boolean isEmpty(T collection) {
         if (collection != null) {

@@ -12,7 +12,7 @@
  * the License.
  */
 
-package com.amohnacs.moviemenu.mainref.ui;
+package com.amohnacs.moviemenu.main.ui;
 
 import android.app.Activity;
 import android.app.UiModeManager;

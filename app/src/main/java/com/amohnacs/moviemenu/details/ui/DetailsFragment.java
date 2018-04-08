@@ -17,7 +17,6 @@ package com.amohnacs.moviemenu.details.ui;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.support.v17.leanback.app.DetailsFragment;
 import android.support.v17.leanback.app.DetailsFragmentBackgroundController;
 import android.support.v17.leanback.widget.Action;
 import android.support.v17.leanback.widget.ArrayObjectAdapter;
@@ -25,10 +24,7 @@ import android.support.v17.leanback.widget.ClassPresenterSelector;
 import android.support.v17.leanback.widget.DetailsOverviewRow;
 import android.support.v17.leanback.widget.FullWidthDetailsOverviewRowPresenter;
 import android.support.v17.leanback.widget.FullWidthDetailsOverviewSharedElementHelper;
-import android.support.v17.leanback.widget.HeaderItem;
 import android.support.v17.leanback.widget.ImageCardView;
-import android.support.v17.leanback.widget.ListRow;
-import android.support.v17.leanback.widget.ListRowPresenter;
 import android.support.v17.leanback.widget.OnActionClickedListener;
 import android.support.v17.leanback.widget.OnItemViewClickedListener;
 import android.support.v17.leanback.widget.Presenter;
@@ -40,27 +36,23 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.amohnacs.moviemenu.R;
-import com.amohnacs.moviemenu.playback.PlaybackActivity;
-import com.amohnacs.moviemenu.details.DetailsDescriptionPresenter;
-import com.amohnacs.moviemenu.mainref.CardPresenter;
-import com.amohnacs.moviemenu.mainref.ui.MainActivity;
+import com.amohnacs.moviemenu.details.DetailsPresenter;
+import com.amohnacs.moviemenu.main.ui.MainActivity;
 import com.amohnacs.moviemenu.model.Movie;
-import com.amohnacs.moviemenu.model.MovieList;
 import com.amohnacs.moviemenu.utils.ViewUtils;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
 
-import java.util.Collections;
-import java.util.List;
+import static com.amohnacs.moviemenu.main.ItemMovieViewModel.GLIDE_IMAGE_ROOT;
 
 /**
  * LeanbackDetailsFragment extends DetailsFragment, a Wrapper fragment for leanback details screens.
  * It shows a detailed view of video and its meta plus related videos.
  */
-public class VideoDetailsFragment extends DetailsFragment {
-    private static final String TAG = VideoDetailsFragment.class.getSimpleName();
+public class DetailsFragment extends android.support.v17.leanback.app.DetailsFragment {
+    private static final String TAG = DetailsFragment.class.getSimpleName();
 
     private static final int ACTION_WATCH_TRAILER = 1;
     private static final int ACTION_RENT = 2;
@@ -96,7 +88,7 @@ public class VideoDetailsFragment extends DetailsFragment {
 
             setupDetailsOverviewRow();
             setupDetailsOverviewRowPresenter();
-            setupRelatedMovieListRow();
+            //setupRelatedMovieListRow();
             setAdapter(mAdapter);
             initializeBackground(mSelectedMovie);
 
@@ -112,7 +104,7 @@ public class VideoDetailsFragment extends DetailsFragment {
         mDetailsBackground.enableParallax();
 
         Glide.with(getActivity())
-                .load(data.getBackgroundImageUrl())
+                .load(GLIDE_IMAGE_ROOT + data.getBackdropPath())
                 .asBitmap()
                 .centerCrop()
                 .error(R.drawable.default_background)
@@ -142,7 +134,7 @@ public class VideoDetailsFragment extends DetailsFragment {
                 ContextCompat.getDrawable(getContext(), R.drawable.default_background));
 
         Glide.with(getActivity())
-                .load(mSelectedMovie.getPosterPath())
+                .load(GLIDE_IMAGE_ROOT + mSelectedMovie.getPosterPath())
                 .centerCrop()
                 .error(R.drawable.default_background)
                 .into(new SimpleTarget<GlideDrawable>(width, height) {
@@ -185,7 +177,7 @@ public class VideoDetailsFragment extends DetailsFragment {
      */
     private void setupDetailsOverviewRowPresenter() {
         FullWidthDetailsOverviewRowPresenter detailsPresenter =
-                new FullWidthDetailsOverviewRowPresenter(new DetailsDescriptionPresenter());
+                new FullWidthDetailsOverviewRowPresenter(new DetailsPresenter());
         FullWidthDetailsOverviewSharedElementHelper sharedElementHelper =
                 new FullWidthDetailsOverviewSharedElementHelper();
 
@@ -202,9 +194,12 @@ public class VideoDetailsFragment extends DetailsFragment {
             @Override
             public void onActionClicked(Action action) {
                 if (action.getId() == ACTION_WATCH_TRAILER) {
+                    /*
                     Intent intent = new Intent(getActivity(), PlaybackActivity.class);
                     intent.putExtra(DetailsActivity.MOVIE, mSelectedMovie);
                     startActivity(intent);
+                    */
+                    Toast.makeText(getActivity(), "Playback Coming Soon!", Toast.LENGTH_SHORT).show();
                 } else {
                     Toast.makeText(getActivity(), action.toString(), Toast.LENGTH_SHORT).show();
                 }
@@ -212,21 +207,6 @@ public class VideoDetailsFragment extends DetailsFragment {
         });
         //we are not interacting with our movies anymore but with overview actions items
         mPresenterSelector.addClassPresenter(DetailsOverviewRow.class, detailsPresenter);
-    }
-
-    private void setupRelatedMovieListRow() {
-        String subcategories[] = {getString(R.string.related_movies)};
-        List<Movie> list = MovieList.getList();
-
-        Collections.shuffle(list);
-        ArrayObjectAdapter listRowAdapter = new ArrayObjectAdapter(new CardPresenter());
-        for (int j = 0; j < NUM_COLS; j++) {
-            listRowAdapter.add(list.get(j % 5));
-        }
-
-        HeaderItem header = new HeaderItem(0, subcategories[0]);
-        mAdapter.add(new ListRow(header, listRowAdapter));
-        mPresenterSelector.addClassPresenter(ListRow.class, new ListRowPresenter());
     }
 
     private final class ItemViewClickedListener implements OnItemViewClickedListener {

@@ -18,6 +18,7 @@ import android.app.Activity;
 import android.os.Bundle;
 
 import com.amohnacs.moviemenu.R;
+import com.amohnacs.moviemenu.base.DelayedBackgroundManager;
 
 /*
  * Details activity class that loads LeanbackDetailsFragment class

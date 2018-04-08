@@ -2,8 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.amohnacs.moviemenu">
 
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.RECORD_AUDIO"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <uses-feature
         android:name="android.hardware.touchscreen"
@@ -19,12 +20,12 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/Theme.Leanback"
-        android:banner="@drawable/bitcoin_banner"
-        android:logo="@drawable/bitcoin_banner"
+        android:banner="@drawable/movie_banner"
+        android:logo="@drawable/movie_banner"
         android:name=".MovieMenu">
         <activity
-            android:name=".mainref.ui.MainActivity"
-            android:icon="@drawable/bitcoin_banner"
+            android:name=".main.ui.MainActivity"
+            android:icon="@drawable/movie_banner"
             android:label="@string/app_name"
             android:screenOrientation="landscape"
             android:configChanges="keyboard|keyboardHidden|navigation">
@@ -35,7 +36,6 @@
             </intent-filter>
         </activity>
         <activity android:name=".details.ui.DetailsActivity" />
-        <activity android:name=".playback.PlaybackActivity" />
         <activity android:name=".error.BrowseErrorActivity" />
     </application>
 

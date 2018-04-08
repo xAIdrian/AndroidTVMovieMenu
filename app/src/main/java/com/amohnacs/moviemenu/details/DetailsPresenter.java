@@ -18,7 +18,7 @@ import android.support.v17.leanback.widget.AbstractDetailsDescriptionPresenter;
 
 import com.amohnacs.moviemenu.model.Movie;
 
-public class DetailsDescriptionPresenter extends AbstractDetailsDescriptionPresenter {
+public class DetailsPresenter extends AbstractDetailsDescriptionPresenter {
 
     @Override
     protected void onBindDescription(ViewHolder viewHolder, Object item) {
@@ -26,8 +26,8 @@ public class DetailsDescriptionPresenter extends AbstractDetailsDescriptionPrese
 
         if (movie != null) {
             viewHolder.getTitle().setText(movie.getTitle());
-            viewHolder.getSubtitle().setText(movie.getOverview());
-            //viewHolder.getBody().setText(movie.getTagLine());
+            viewHolder.getSubtitle().setText(String.valueOf((int) movie.getPopularity()));
+            viewHolder.getBody().setText(movie.getOverview());
         }
     }
 }
