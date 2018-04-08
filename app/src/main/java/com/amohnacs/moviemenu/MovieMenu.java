@@ -7,6 +7,7 @@ import android.support.v17.leanback.widget.ArrayObjectAdapter;
 import com.amohnacs.moviemenu.main.MoviePresenter;
 import com.amohnacs.moviemenu.model.MovieMenuRow;
 import com.amohnacs.moviemenu.utils.CollectionUtils;
+import com.bumptech.glide.request.target.ViewTarget;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,6 +24,12 @@ public class MovieMenu extends Application {
     private static final String TAG = MovieMenu.class.getSimpleName();
 
     private Scheduler scheduler;
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+
+    }
 
     private static MovieMenu get(Context context) {
         return (MovieMenu) context.getApplicationContext();

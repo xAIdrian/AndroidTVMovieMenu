@@ -61,6 +61,7 @@ public class MainFragment extends BrowseFragment {
 
     private void setupUIElements() {
         //this code shows an image in teh fragment's title bar
+        // TODO: 4/7/18 this image has gross white corners that aren't cut.  We need to change this or change the background to white
         setBadgeDrawable(getActivity().getResources().getDrawable(R.drawable.movie_banner));
         setTitle(getString(R.string.browse_title)); // Badge, when set, takes precedent
         // over title
@@ -77,8 +78,12 @@ public class MainFragment extends BrowseFragment {
     }
 
     /**
+     * Creates the RowsAdapter for the Fragment
+     * The ListRowPresenter tells to render ListRow objects
+     * <p></p>
      * Adds a new {@link MovieMenuRow} to the adapter. Each row will contain a collection of Movies
-     * that will be rendered using the MoviePresenter
+     * that will be rendered using the MoviePresenter.
+     *
      */
     private void createDataRows() {
         rowsAdapter = new ArrayObjectAdapter(new ListRowPresenter());

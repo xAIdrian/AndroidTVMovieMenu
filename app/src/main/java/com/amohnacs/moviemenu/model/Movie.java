@@ -40,6 +40,11 @@ public class Movie implements Serializable {
     public Movie() {
     }
 
+    public Movie(String posterPath, double popularity) {
+        this.posterPath = posterPath;
+        this.popularity = popularity;
+    }
+
     public Movie(long id, String title, String backdropPath, String posterPath, String videoUrl, String overview, double popularity) {
         this.id = id;
         this.title = title;

@@ -32,11 +32,12 @@ public class MoviePresenter extends Presenter {
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent) {
-        LayoutInflater layoutInflater =
-                LayoutInflater.from(parent.getContext());
+       /* LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
         ViewMovieCardBinding binding = DataBindingUtil.inflate(
                 layoutInflater, R.layout.view_movie_card, parent,false);
-        return new ViewHolder(new MovieCardViewHolder(context, binding));
+        */
+
+        return new ViewHolder(new MovieCardViewHolder(context, null));
     }
 
     @Override

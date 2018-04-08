@@ -15,7 +15,7 @@ import com.bumptech.glide.Glide;
 
 public class ItemMovieViewModel extends BaseObservable {
     //sample url for image http://image.tmdb.org/t/p/w1280/3kcEGnYBHDeqmdYf8ZRbKdfmlUy.jpg
-    private static final String GLIDE_IMAGE_ROOT = "http://image.tmdb.org/t/p/w1280";
+    public static final String GLIDE_IMAGE_ROOT = "http://image.tmdb.org/t/p/w1280";
 
     private Movie movie;
     private Context context;
