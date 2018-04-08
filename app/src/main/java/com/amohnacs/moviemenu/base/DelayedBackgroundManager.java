@@ -23,8 +23,8 @@ import java.util.TimerTask;
  * We are attaching our current activity to the manager and settings the activity's background
  * being supplied by the BackgroundManager
  */
-public class TimedBackgroundManager {
-    private static final String TAG = TimedBackgroundManager.class.getSimpleName();
+public class DelayedBackgroundManager {
+    private static final String TAG = DelayedBackgroundManager.class.getSimpleName();
     private static final int BACKGROUND_UPDATE_DELAY = 300;
 
     private final Handler mHandler = new Handler();
@@ -35,9 +35,22 @@ public class TimedBackgroundManager {
     private String mBackgroundUri;
     private BackgroundManager mBackgroundManager;
 
+    private static volatile DelayedBackgroundManager instance;
+
     private Context context;
 
-    public TimedBackgroundManager(Activity activity) {
+    public static DelayedBackgroundManager getInstance(Activity activity) {
+        if (instance == null) {
+            synchronized (DelayedBackgroundManager.class) {
+                if (instance == null) {
+                    instance = new DelayedBackgroundManager(activity);
+                }
+            }
+        }
+        return instance;
+    }
+
+    private DelayedBackgroundManager(Activity activity) {
         this.context = activity;
 
         mBackgroundManager = BackgroundManager.getInstance(activity);
@@ -47,7 +60,7 @@ public class TimedBackgroundManager {
         activity.getWindowManager().getDefaultDisplay().getMetrics(mMetrics);
     }
 
-    protected void updateBackground(String uri) {
+    private void updateBackground(String uri) {
         int width = mMetrics.widthPixels;
         int height = mMetrics.heightPixels;
 
@@ -66,7 +79,7 @@ public class TimedBackgroundManager {
         mBackgroundTimer.cancel();
     }
 
-    public void startBackgroundTimer() {
+    private void startBackgroundTimer() {
         if (null != mBackgroundTimer) {
             mBackgroundTimer.cancel();
         }
@@ -78,8 +91,13 @@ public class TimedBackgroundManager {
         return mBackgroundTimer;
     }
 
-    public void setBackgroundUri(String backgroundUri) {
+    private void setBackgroundUri(String backgroundUri) {
         this.mBackgroundUri = backgroundUri;
+    }
+
+    public void updateBackgroundWithDelay(String url) {
+        setBackgroundUri(url);
+        startBackgroundTimer();
     }
 
     private class UpdateBackgroundTask extends TimerTask {

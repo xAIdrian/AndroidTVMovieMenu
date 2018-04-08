@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.Observable;
 
 import android.databinding.ObservableInt;
-import android.support.annotation.Nullable;
 import android.support.v17.leanback.widget.ArrayObjectAdapter;
 import android.util.Log;
 import android.view.View;
@@ -33,7 +32,11 @@ import io.reactivex.disposables.Disposable;
 
 public class MovieViewModel extends Observable implements MVVM.ViewActions {
     private static final String TAG = MovieViewModel.class.getSimpleName();
+
     public static final int EIGHTEEN_MOVIES = 0;
+    private static final int SEVENTEEN_MOVIES = 1;
+    private static final int SIXTEEN_MOVIES = 2;
+    private static final int FIFTEEN_MOVIES = 3;
 
     private static volatile MovieViewModel instance;
 
@@ -120,8 +123,23 @@ public class MovieViewModel extends Observable implements MVVM.ViewActions {
         MoviePresenter moviePresenter = new MoviePresenter(context);
 
         rows.add(new MovieMenuRow(
-                context.getString(R.string.top_title),
+                context.getString(R.string.eighteen_title),
                 EIGHTEEN_MOVIES,
+                new ArrayObjectAdapter(moviePresenter)));
+
+        rows.add(new MovieMenuRow(
+                context.getString(R.string.seventeen_title),
+                SEVENTEEN_MOVIES,
+                new ArrayObjectAdapter(moviePresenter)));
+
+        rows.add(new MovieMenuRow(
+                context.getString(R.string.sixteen_title),
+                SIXTEEN_MOVIES,
+                new ArrayObjectAdapter(moviePresenter)));
+
+        rows.add(new MovieMenuRow(
+                context.getString(R.string.fifteen_title),
+                FIFTEEN_MOVIES,
                 new ArrayObjectAdapter(moviePresenter)));
 
         return rows;

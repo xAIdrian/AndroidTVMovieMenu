@@ -20,5 +20,8 @@
     <string name="video_error_unknown_error">Failed to load video</string>
     <string name="error_fragment_message">An error occurred</string>
     <string name="dismiss_error">Dismiss</string>
-    <string name="top_title">2018 Movies</string>
+    <string name="eighteen_title">2018 Movies</string>
+    <string name="fifteen_title">2015 Movies</string>
+    <string name="sixteen_title">2016 Movies</string>
+    <string name="seventeen_title">2017 Movies</string>
 </resources>

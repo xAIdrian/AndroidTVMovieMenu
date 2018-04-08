@@ -59,6 +59,10 @@ public class MovieCardViewHolder extends BindableCardView<Movie> {
         */
     }
 
+    public ImageView getImageView() {
+        return imageView;
+    }
+
     @Override
     protected int getLayoutResource() {
         return R.layout.view_movie_card;

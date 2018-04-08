@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.support.v17.leanback.app.BrowseFragment;
 import android.support.v17.leanback.widget.ArrayObjectAdapter;
 import android.support.v17.leanback.widget.HeaderItem;
-import android.support.v17.leanback.widget.ImageCardView;
 import android.support.v17.leanback.widget.ListRow;
 import android.support.v17.leanback.widget.ListRowPresenter;
 import android.support.v17.leanback.widget.OnItemViewClickedListener;
@@ -18,22 +17,25 @@ import android.support.v17.leanback.widget.Row;
 import android.support.v17.leanback.widget.RowPresenter;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.util.Log;
+import android.view.View;
 import android.widget.Toast;
 
 import com.amohnacs.moviemenu.R;
-import com.amohnacs.moviemenu.base.TimedBackgroundManager;
+import com.amohnacs.moviemenu.base.DelayedBackgroundManager;
 import com.amohnacs.moviemenu.error.BrowseErrorActivity;
-import com.amohnacs.moviemenu.detailsref.ui.DetailsActivity;
+import com.amohnacs.moviemenu.details.ui.DetailsActivity;
 import com.amohnacs.moviemenu.main.MovieViewModel;
 import com.amohnacs.moviemenu.model.Movie;
 import com.amohnacs.moviemenu.model.MovieMenuRow;
 import com.amohnacs.moviemenu.utils.CollectionUtils;
 
+import static com.amohnacs.moviemenu.main.ItemMovieViewModel.GLIDE_IMAGE_ROOT;
+
 public class MainFragment extends BrowseFragment {
     private static final String TAG = MainFragment.class.getSimpleName();
 
     private ArrayObjectAdapter rowsAdapter;
-    private TimedBackgroundManager backgroundImageManager;
+    private DelayedBackgroundManager backgroundImageManager;
     private MovieViewModel viewModel;
     private List<MovieMenuRow> rows;
 
@@ -43,9 +45,10 @@ public class MainFragment extends BrowseFragment {
         super.onActivityCreated(savedInstanceState);
 
         viewModel = MovieViewModel.getInstance(getActivity());
-        backgroundImageManager = new TimedBackgroundManager(getActivity());
+        backgroundImageManager = DelayedBackgroundManager.getInstance(getActivity());
 
         setupUIElements();
+        setupEventListeners();
         // TODO: 4/6/18 indeterminate loader
     }
 
@@ -104,6 +107,21 @@ public class MainFragment extends BrowseFragment {
         setAdapter(rowsAdapter);
     }
 
+    // TODO: 4/7/18 replace with databinding
+    private void setupEventListeners() {
+        setOnSearchClickedListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(getActivity(), "Implement your own in-app search", Toast.LENGTH_LONG)
+                        .show();
+            }
+        });
+
+        setOnItemViewClickedListener(new ItemViewClickedListener());
+        setOnItemViewSelectedListener(new ItemViewSelectedListener());
+    }
+
     /**
      * This onClickListener is when the specific view comes into focus, the user is about to select something
      */
@@ -112,8 +130,14 @@ public class MainFragment extends BrowseFragment {
         public void onItemSelected(Presenter.ViewHolder itemViewHolder, Object item,
                                    RowPresenter.ViewHolder rowViewHolder, Row row) {
             if (item instanceof Movie) {
-                backgroundImageManager.setBackgroundUri(((Movie) item).getBackdropPath());
-                backgroundImageManager.startBackgroundTimer();
+                // TODO: 4/7/18 this needs to be moved to our ViewModel
+
+                Movie movie = (Movie) item;
+
+                if (movie.getBackdropPath() != null && !movie.getBackdropPath().isEmpty()) {
+                    backgroundImageManager.updateBackgroundWithDelay(
+                            GLIDE_IMAGE_ROOT + ((Movie) item).getBackdropPath());
+                }
             }
         }
     }
@@ -129,6 +153,8 @@ public class MainFragment extends BrowseFragment {
             //if the adapter item we clicked on holds a movie object
             if (item instanceof Movie) {
 
+                //put movie in pundle with serializable
+                //we could use parcelable for speed and efficiency but I don't want to add boilercode right now
                 Movie movie = (Movie) item;
                 Log.d(TAG, "Item: " + item.toString());
                 Intent intent = new Intent(getActivity(), DetailsActivity.class);
@@ -136,7 +162,7 @@ public class MainFragment extends BrowseFragment {
 
                 Bundle bundle = ActivityOptionsCompat.makeSceneTransitionAnimation(
                         getActivity(),
-                        ((ImageCardView) itemViewHolder.view).getMainImageView(),
+                        ((MovieCardViewHolder) itemViewHolder.view).getImageView(),
                         DetailsActivity.SHARED_ELEMENT_NAME).toBundle();
 
                 getActivity().startActivity(intent, bundle);
