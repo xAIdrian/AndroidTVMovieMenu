@@ -37,7 +37,7 @@ public class MoviePresenter extends Presenter {
                 layoutInflater, R.layout.view_movie_card, parent,false);
         */
 
-        return new ViewHolder(new MovieCardViewHolder(context, null));
+        return new ViewHolder(new MovieCardViewHolder(context));
     }
 
     @Override

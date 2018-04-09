@@ -29,13 +29,11 @@ public class MovieCardViewHolder extends BindableCardView<Movie> {
     @BindView(R.id.popularity_tv)
     TextView textView;
 
-    private ViewMovieCardBinding binding;
     private Context context;
 
-    public MovieCardViewHolder(Context context, ViewMovieCardBinding binder) {
+    public MovieCardViewHolder(Context context) {
         super(context);
         this.context = context;
-        //this.binding = binder;
         ButterKnife.bind(this);
     }
 
@@ -47,16 +45,7 @@ public class MovieCardViewHolder extends BindableCardView<Movie> {
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .into(imageView);
 
-        textView.setText(data.getTitle());
-        /*
-        if (binding.getMovieViewModel() == null) {
-            binding.setMovieViewModel(new ItemMovieViewModel(data, context));
-        } else {
-            binding.getMovieViewModel().setMovie(data);
-        }
-        //The executePendingBindings() is important!
-        binding.executePendingBindings();
-        */
+        textView.setText(String.valueOf((int) data.getPopularity()));
     }
 
     public ImageView getImageView() {
